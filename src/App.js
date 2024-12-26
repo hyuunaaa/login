@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Outlet, Route, Routes, Navigate } from 'react-router-dom';
 import './App.css';
 import Header from './components/Header/Header';
@@ -11,7 +11,7 @@ import Nav from './components/Nav';
 import MainPage from './pages/MainPage';
 import DetailPage from './pages/DetailPage';
 import SearchPage from './pages/SearchPage';
-import SigninPage from './pages/Signin/Signin';
+import SignIn from './pages/Signin/Signin';
 
 // Home 관련 페이지
 import HomePopular from './views/Home/HomePopular/HomePopular';
@@ -36,12 +36,32 @@ const ProtectedRoute = ({ children }) => {
 };
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [currentUser, setCurrentUser] = useState(null);
+
   useEffect(() => {
     if (window.Kakao && !window.Kakao.isInitialized()) {
       window.Kakao.init(process.env.REACT_APP_KAKAO_API_KEY);
       console.log('[App.js] Kakao SDK init:', window.Kakao.isInitialized());
     }
   }, []);
+
+  const handleLogin = (userEmail) => {
+    console.log("===> call handleLogin")    
+    localStorage.setItem("isAuthenticated", "true");
+    localStorage.setItem("currentUser", userEmail);
+    setIsAuthenticated(true);
+    setCurrentUser(userEmail);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("isAuthenticated");
+    localStorage.removeItem("currentUser");
+    setIsAuthenticated(false);
+    setCurrentUser(null);
+  };
+
 
   return (
     <div className="App">
@@ -68,7 +88,7 @@ function App() {
         </Route>
 
         {/* 🔑 로그인/회원가입 */}
-        <Route path="/signin" element={<SigninPage />} />
+        <Route path="/signin" element={<SignIn onLogin={handleLogin}/>} /> {/* 로그인/회원가입 */}
 
         {/* 🛑 잘못된 경로 처리 */}
         <Route path="*" element={<Navigate to="/" replace />} />

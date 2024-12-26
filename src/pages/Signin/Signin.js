@@ -7,7 +7,8 @@ import axios from 'axios';
 import 'react-toastify/dist/ReactToastify.css';
 import './Signin.css';
 
-function SignIn() {
+//function SignIn() {
+const SignIn = ({ onLogin }) => {
   const { handleLogin, handleRegister, loading } = useAuth();
   const navigate = useNavigate();
 
@@ -47,7 +48,7 @@ function SignIn() {
             const nickname = res.kakao_account.profile.nickname;
             console.log("Welcome, ", nickname);
             setMessage(`Welcome, ${nickname}!`);
-            //onLogin(nickname);
+            onLogin(nickname);
             navigate("/", { replace: true });
           },
           fail: (err) => {
@@ -120,6 +121,7 @@ function SignIn() {
     try {
       await handleLogin(email, password);
       toast.success('로그인에 성공했습니다!');
+      onLogin(email);      
       navigate('/');
     } catch (err) {
       toast.error(err.message || '로그인에 실패했습니다.');

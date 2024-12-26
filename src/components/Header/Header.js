@@ -37,7 +37,7 @@ function Header() {
     setCurrentUser(null);
 
     alert('로그아웃이 완료되었습니다.');
-    navigate('/signin');
+    navigate('/');
     window.location.reload();
   };
 

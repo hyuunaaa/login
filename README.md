@@ -3,7 +3,7 @@
 
 #실행
 ## npm run start(.env-dev 사용)
-'''c
+```c
 > WSD-4@0.1.0 start
 > react-app-rewired start
 
@@ -21,10 +21,10 @@
   'process.env.REACT_APP_PORT': '"3000"',
   'process.env.REACT_APP_TMDB_API_KEY': '"f72c49626a88a15c7088bd092fcad0bc"',
   'process.env.REACT_APP_KAKAO_API_KEY': '"36fec796d0592c3e09983fd2dbc0506d"'
-''' 
+```
 
 ## npm run build(.env-prod 사용)
-'''c
+```c
 npm run build
 
 > WSD-4@0.1.0 build
@@ -52,4 +52,4 @@ Compiled with warnings.
 [eslint] 
 src/components/MovieGrid/MovieGrid.js
 
-'''
+```

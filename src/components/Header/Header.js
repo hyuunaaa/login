@@ -50,21 +50,13 @@ function Header() {
   const styles = {
     userHighlight: {
       fontWeight: 'bold',
-      backgroundColor: 'yellow',
-      color: 'black',
+      color: '#fff',
       padding: '4px 8px',
-      borderRadius: '4px',
       display: 'inline-block',
-      marginRight: '4px',
-    },
-    inlineText: {
-      fontWeight: 'bold',
-      backgroundColor: 'yellow',
-      color: 'black',
-      padding: '4px 8px',
-      borderRadius: '4px',
-      display: 'inline-block',
-      marginLeft: '4px',
+      textShadow: '1px 1px 3px rgba(0,0,0,0.7)',
+      backgroundColor: 'rgba(0, 0, 0, 0.3)',
+      borderRadius: '8px',
+      backdropFilter: 'blur(4px)',
     },
   };
 
@@ -94,9 +86,8 @@ function Header() {
             <>
               {/* 사용자 이름 표시 */}
               <span style={styles.userHighlight}>
-                {currentUser.split('@')[0]} 
+                {currentUser.split('@')[0]}님
               </span>
-              <p style={styles.inlineText}>님</p>
 
               {/* 로그아웃 버튼 */}
               <button className="icon-button logout-button" onClick={handleLogout}>
@@ -105,13 +96,10 @@ function Header() {
               </button>
             </>
           ) : (
-            <>
-              {/* 로그인 버튼 */}
-              <button className="icon-button" onClick={() => navigate('/signin')}>
-                <FontAwesomeIcon icon={faUser} />
-                <span>로그인</span>
-              </button>
-            </>
+            <button className="icon-button" onClick={() => navigate('/signin')}>
+              <FontAwesomeIcon icon={faUser} />
+              <span>로그인</span>
+            </button>
           )}
 
           {/* 모바일 메뉴 버튼 */}
@@ -120,21 +108,6 @@ function Header() {
           </button>
         </div>
       </header>
-
-      {/* 모바일 네비게이션 */}
-      <div className={`mobile-nav ${isMobileMenuOpen ? 'open' : ''}`}>
-        <button className="close-button" onClick={toggleMobileMenu}>
-          <FontAwesomeIcon icon={faTimes} />
-        </button>
-        <nav>
-          <ul>
-            <li><Link to="/" onClick={toggleMobileMenu}>홈</Link></li>
-            <li><Link to="/popular" onClick={toggleMobileMenu}>대세 콘텐츠</Link></li>
-            <li><Link to="/wishlist" onClick={toggleMobileMenu}>내가 찜한 리스트</Link></li>
-            <li><Link to="/search" onClick={toggleMobileMenu}>찾아보기</Link></li>
-          </ul>
-        </nav>
-      </div>
     </div>
   );
 }

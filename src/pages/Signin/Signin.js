@@ -45,8 +45,16 @@ const SignIn = ({ onLogin }) => {
           url: "/v2/user/me",
           success: (res) => {
             console.log("Kakao API response", res);
-            const nickname = res.kakao_account.profile.nickname;
-            console.log("Welcome, ", nickname);
+            const userId = res.id; // 항상 제공
+            const nickname = res.kakao_account.profile?.nickname; // 기본 제공
+            const profileImage = res.kakao_account.profile?.profile_image_url; // 기본 제공
+            const thumbnailImage = res.kakao_account.profile?.thumbnail_image_url; // 기본 제공
+            
+            console.log("kakao_User ID:", userId);
+            console.log("kakao_Nickname:", nickname);
+            console.log("kakao_Profile Image URL:", profileImage);
+            console.log("kakao_Thumbnail Image URL:", thumbnailImage);
+
             setMessage(`Welcome, ${nickname}!`);
             onLogin(nickname);
             navigate("/", { replace: true });

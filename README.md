@@ -6,8 +6,11 @@
 2. **환경 변수 관리:** `.env-dev`와 `.env-prod` 파일을 사용하여 개발 및 배포 환경을 분리했습니다.  
 3. **TMDB API 통합:** TMDB API를 활용해 인기 영화, 검색, 찜 목록 등의 기능을 구현했습니다.  
 
-프로젝트는 https://github.com/hyuunaaa/login.git에서 확인할 수 있습니다.
-🚀**[ha's NETFLIX](https://wsd4-login.netlify.app/)**
+---
+
+## 프로젝트 확인
+- github: https://github.com/hyuunaaa/login.git
+- netlify: [ha's NETFLIX](https://wsd4-login.netlify.app/)
 ---
 
 ## 기술 스택
@@ -37,13 +40,11 @@ REACT_APP_IP_ADDRESS=localhost
 REACT_APP_PORT=3000
 REACT_APP_TMDB_API_KEY=YOUR_TMDB_API_KEY
 REACT_APP_KAKAO_API_KEY=YOUR_KAKAO_API_KEY
-REACT_APP_KAKAO_LOGOUT_REDIRECT_URI=http://localhost:3000/signin
 ```
 
 ```bash
 REACT_APP_TMDB_API_KEY=YOUR_TMDB_API_KEY
 REACT_APP_KAKAO_API_KEY=YOUR_KAKAO_API_KEY
-REACT_APP_KAKAO_LOGOUT_REDIRECT_URI=http://localhost:3000/signin
 ```
 
 ---

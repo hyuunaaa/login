@@ -5,24 +5,18 @@ import { faUser, faTicketAlt, faBars, faTimes, faSignOutAlt } from '@fortawesome
 import './Header.css';
 
 function Header() {
-  const [currentUser, setCurrentUser] = useState(null);
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null); // 사용자 정보
+  const [isScrolled, setIsScrolled] = useState(false); // 스크롤 상태
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // 모바일 메뉴 열림 상태
+  const [isAuthenticated, setIsAuthenticated] = useState(false); // 로그인 상태 확인
   const navigate = useNavigate();
 
+  // ✅ 로그인 상태 확인
   useEffect(() => {
-    const storedUser = localStorage.getItem("currentUser");
-    if (storedUser) {
-      setCurrentUser(storedUser); 
-      //const userKey = getUserKey(storedUser); 
-      //const storedSearches = JSON.parse(localStorage.getItem(userKey)) || [];
-      //setRecentSearches(storedSearches);
-    } else {
-      setCurrentUser("Error#1");
-    }    
-
-    console.log("===>>>>>>>", storedUser)
-    console.log("===>>>>>>>", currentUser)
+    const storedUser = localStorage.getItem('currentUser');
+    const authStatus = localStorage.getItem('isAuthenticated') === 'true';
+    setIsAuthenticated(authStatus);
+    setCurrentUser(storedUser || null);
 
     window.addEventListener('scroll', handleScroll);
     return () => {
@@ -30,60 +24,54 @@ function Header() {
     };
   }, []);
 
-  const styles = {
-    userHighlight: {
-      fontWeight: "bold",     // 글자 굵기
-      backgroundColor: "yellow", // 노란 배경
-      color: "black",         // 검정 글자
-      padding: "4px 8px",     // 내부 여백
-      borderRadius: "4px",    // 모서리 둥글게
-      display: "inline-block", // 인라인 블록 요소
-      marginRight: "4px",     // 오른쪽 간격 추가
-    },
-    inlineText: {
-      fontWeight: "bold",     // 글자 굵기
-      backgroundColor: "yellow", // 노란 배경
-      color: "black",         // 검정 글자
-      padding: "4px 8px",     // 내부 여백
-      borderRadius: "4px",    // 모서리 둥글게
-      display: "inline-block", // 인라인 블록 요소
-      marginLeft: "4px",      // 왼쪽 간격 추가
-    }
+  // ✅ 스크롤 이벤트
+  const handleScroll = () => {
+    setIsScrolled(window.scrollY > 50);
   };
 
+  // ✅ 로그아웃 핸들러
   const handleLogout = () => {
-    /*
-    const kakaoLogoutUrl = `https://kauth.kakao.com/oauth/logout?client_id=${
-      process.env.REACT_APP_KAKAO_API_KEY
-    }&logout_redirect_uri=${encodeURIComponent(
-      process.env.REACT_APP_KAKAO_LOGOUT_REDIRECT_URI
-    )}`;
-    console.log("KAKAO_LOGOUT_REDIRECT_URI:", process.env.REACT_APP_KAKAO_LOGOUT_REDIRECT_URI);
-*/
-    localStorage.removeItem("isAuthenticated"); 
-    localStorage.removeItem("currentUser"); 
-    localStorage.removeItem("userPassword");
+    localStorage.removeItem('isAuthenticated');
+    localStorage.removeItem('currentUser');
+    setIsAuthenticated(false);
+    setCurrentUser(null);
 
-    setCurrentUser(null); 
-
-    //window.location.href = kakaoLogoutUrl;
-
-    alert("로그아웃이 완료되었습니다."); 
-    navigate("/signin"); 
-    window.location.reload(); 
+    alert('로그아웃이 완료되었습니다.');
+    navigate('/signin');
+    window.location.reload();
   };
 
+  // ✅ 모바일 메뉴 토글
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
-  const handleScroll = () => {
-    setIsScrolled(window.scrollY > 50);
+  // ✅ 스타일 설정
+  const styles = {
+    userHighlight: {
+      fontWeight: 'bold',
+      backgroundColor: 'yellow',
+      color: 'black',
+      padding: '4px 8px',
+      borderRadius: '4px',
+      display: 'inline-block',
+      marginRight: '4px',
+    },
+    inlineText: {
+      fontWeight: 'bold',
+      backgroundColor: 'yellow',
+      color: 'black',
+      padding: '4px 8px',
+      borderRadius: '4px',
+      display: 'inline-block',
+      marginLeft: '4px',
+    },
   };
 
   return (
     <div id="container">
       <header className={`app-header ${isScrolled ? 'scrolled' : ''}`}>
+        {/* 로고 */}
         <div className="header-left">
           <div className="logo">
             <Link to="/">
@@ -99,28 +87,32 @@ function Header() {
             </ul>
           </nav>
         </div>
-        
-        {/* 우측 상단 아이콘 및 로그아웃 버튼 */}
-        <div className="header-right">
-          {currentUser && (
-            <>
-              <span style={styles.userHighlight}>
-                {currentUser.split("@")[0]} 
-              </span>
-              <p style={styles.inlineText}> 님</p>
-            </>
-          )}          
-          {/* 로그아웃 버튼 */}
-          <button className="icon-button logout-button" onClick={handleLogout}>
-            <FontAwesomeIcon icon={faSignOutAlt} />
-            <span>로그아웃</span>
-          </button>
 
-          {/* 사용자 아이콘 
-          <button className="icon-button">
-            <FontAwesomeIcon icon={faUser} />
-          </button>
-          */}
+        {/* 사용자 정보 및 로그아웃 버튼 */}
+        <div className="header-right">
+          {isAuthenticated && currentUser ? (
+            <>
+              {/* 사용자 이름 표시 */}
+              <span style={styles.userHighlight}>
+                {currentUser.split('@')[0]} 
+              </span>
+              <p style={styles.inlineText}>님</p>
+
+              {/* 로그아웃 버튼 */}
+              <button className="icon-button logout-button" onClick={handleLogout}>
+                <FontAwesomeIcon icon={faSignOutAlt} />
+                <span>로그아웃</span>
+              </button>
+            </>
+          ) : (
+            <>
+              {/* 로그인 버튼 */}
+              <button className="icon-button" onClick={() => navigate('/signin')}>
+                <FontAwesomeIcon icon={faUser} />
+                <span>로그인</span>
+              </button>
+            </>
+          )}
 
           {/* 모바일 메뉴 버튼 */}
           <button className="icon-button mobile-menu-button" onClick={toggleMobileMenu}>

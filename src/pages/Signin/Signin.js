@@ -1,3 +1,4 @@
+// src/pages/Signin/Signin.js
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
@@ -18,10 +19,51 @@ function SignIn() {
   const [registerPassword, setRegisterPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [acceptTerms, setAcceptTerms] = useState(false);
+  const [message, setMessage] = useState("");
 
   const REST_API_KEY = process.env.REACT_APP_KAKAO_API_KEY;
   const REDIRECT_URI = 'http://localhost:3001/signin';
   const kakaoAuthURL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+
+  const kakao_api = process.env.REACT_APP_KAKAO_API_KEY;
+
+  const initializeKakao = () => {
+    if (!window.Kakao.isInitialized()) {
+      window.Kakao.init(kakao_api); // 카카오에서 제공받은 JavaScript Key를 입력
+    }
+  };
+
+  const handleKakaoLogin = () => {
+    initializeKakao();
+
+    window.Kakao.Auth.login({
+      scope: "profile_nickname",
+      success: (authObj) => {
+        console.log("Kakao 로그인 성공!!", authObj);
+        window.Kakao.API.request({
+          url: "/v2/user/me",
+          success: (res) => {
+            console.log("Kakao API response", res);
+            const nickname = res.kakao_account.profile.nickname;
+            console.log("Welcome, ", nickname);
+            setMessage(`Welcome, ${nickname}!`);
+            //onLogin(nickname);
+            navigate("/", { replace: true });
+          },
+          fail: (err) => {
+            console.error("Kakao API request failed", err);
+            alert("Kakao API 호출에 실패했습니다.");
+            setMessage("Failed to retrieve user information.");
+          },
+        });
+      },
+      fail: (err) => {
+        console.error("Kakao 로그인 실패!!", err);
+        alert("Kakao 로그인 실패!! 네트워크 상태를 확인해주세요.");
+        setMessage("Kakao 로그인 실패!! 네트워크 상태를 확인해주세요.");
+      },
+    });
+  };
 
   // ✅ 카카오 로그인 처리
   useEffect(() => {
@@ -136,7 +178,7 @@ function SignIn() {
                 <button
                   type="button"
                   className="kakao-login-btn"
-                  onClick={() => (window.location.href = kakaoAuthURL)}
+                  onClick={handleKakaoLogin}
                 >
                   Login with Kakao
                 </button>

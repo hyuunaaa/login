@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { Outlet, Route, Routes } from 'react-router-dom';
 import './App.css';
@@ -26,6 +26,14 @@ const Layout = () => {
 };
 
 function App() {
+
+  useEffect(() => {
+    if (window.Kakao && !window.Kakao.isInitialized()) {
+      window.Kakao.init(process.env.REACT_APP_KAKAO_API_KEY);
+      console.log('[App.js] Kakao SDK init:', window.Kakao.isInitialized());
+    }
+  }, []);  
+
   return (
     <div className="App">
       <Routes>

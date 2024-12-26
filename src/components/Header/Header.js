@@ -1,8 +1,7 @@
-// src/components/Header/Header.js
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faTicketAlt, faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faTicketAlt, faBars, faTimes, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import './Header.css';
 
 function Header() {
@@ -17,8 +16,9 @@ function Header() {
     };
   }, []);
 
-  const removeKey = () => {
-    localStorage.removeItem('TMDb-Key');
+  const handleLogout = () => {
+    localStorage.removeItem('isAuthenticated');
+    localStorage.removeItem('currentUser');
     navigate('/signin');
   };
 
@@ -41,25 +41,28 @@ function Header() {
           </div>
           <nav className="nav-links desktop-nav">
             <ul>
-              <li>
-                <Link to="/">홈</Link>
-              </li>
-              <li>
-                <Link to="/popular">대세 콘텐츠</Link>
-              </li>
-              <li>
-                <Link to="/wishlist">내가 찜한 리스트</Link>
-              </li>
-              <li>
-                <Link to="/search">찾아보기</Link>
-              </li>
+              <li><Link to="/">홈</Link></li>
+              <li><Link to="/popular">대세 콘텐츠</Link></li>
+              <li><Link to="/wishlist">내가 찜한 리스트</Link></li>
+              <li><Link to="/search">찾아보기</Link></li>
             </ul>
           </nav>
         </div>
+        
+        {/* 우측 상단 아이콘 및 로그아웃 버튼 */}
         <div className="header-right">
-          <button className="icon-button" onClick={removeKey}>
+          {/* 로그아웃 버튼 */}
+          <button className="icon-button logout-button" onClick={handleLogout}>
+            <FontAwesomeIcon icon={faSignOutAlt} />
+            <span>로그아웃</span>
+          </button>
+
+          {/* 사용자 아이콘 */}
+          <button className="icon-button">
             <FontAwesomeIcon icon={faUser} />
           </button>
+
+          {/* 모바일 메뉴 버튼 */}
           <button className="icon-button mobile-menu-button" onClick={toggleMobileMenu}>
             <FontAwesomeIcon icon={faBars} />
           </button>
@@ -73,26 +76,10 @@ function Header() {
         </button>
         <nav>
           <ul>
-            <li>
-              <Link to="/" onClick={toggleMobileMenu}>
-                홈
-              </Link>
-            </li>
-            <li>
-              <Link to="/popular" onClick={toggleMobileMenu}>
-                대세 콘텐츠
-              </Link>
-            </li>
-            <li>
-              <Link to="/wishlist" onClick={toggleMobileMenu}>
-                내가 찜한 리스트
-              </Link>
-            </li>
-            <li>
-              <Link to="/search" onClick={toggleMobileMenu}>
-                찾아보기
-              </Link>
-            </li>
+            <li><Link to="/" onClick={toggleMobileMenu}>홈</Link></li>
+            <li><Link to="/popular" onClick={toggleMobileMenu}>대세 콘텐츠</Link></li>
+            <li><Link to="/wishlist" onClick={toggleMobileMenu}>내가 찜한 리스트</Link></li>
+            <li><Link to="/search" onClick={toggleMobileMenu}>찾아보기</Link></li>
           </ul>
         </nav>
       </div>
